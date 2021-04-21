@@ -5,15 +5,21 @@ import tensorflow as tf
 
 
 
-def train(model, datasets):
-    """ Training routine. """
-
-    # Begin training
+def train(model):
     model.fit(
-        x=datasets.train_data,
-        validation_data=datasets.test_data,
+        x=data.X_train,
+        y=data.y_train,
         epochs=hp.num_epochs,
         batch_size=None,
+        validation_split=0.15,
+        verbose=1
+    )
+
+def test(model):
+    model.evaluate(
+        x=data.X_test,
+        y=data.y_test,
+        verbose=1
     )
 
 
@@ -21,18 +27,21 @@ if __name__ == "__main__":
     data = Data()
     data.normalize()
     data.preproccess()
-    X_train, X_test, y_train, y_test = data.split_data()
+    data.split_data()
 
-    model = Model(tf.keras.Input(shape=(hp.img_size, hp.img_size, 3)))
+    model = Model()
+    model(tf.keras.Input(shape=(hp.img_size, hp.img_size, 3)))
 
     model.summary()
 
     model.compile(
         optimizer=model.optimizer,
         loss=model.loss_fn,
-        metrics=["sparse_categorical_accuracy"])
+        metrics=["sparse_categorical_accuracy"]
+        )
     
-    train()
+    train(model)
+    # test(model)
     
 
     

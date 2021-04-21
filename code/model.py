@@ -5,42 +5,60 @@ from tensorflow.keras.layers import \
 import hyperparameters as hp
 
 class Model(tf.keras.Model):
+    """ Subclassing the model """
 
     def __init__(self):
         super(Model, self).__init__()
 
         self.optimizer = tf.keras.optimizers.RMSprop(learning_rate=hp.learning_rate)
 
-        self.architecture = [
-            # Block 1
-            Conv2D(filters=64, kernel_size=3, padding="same", activation="relu"),
-            Conv2D(filters=64, kernel_size=3, padding="same", activation="relu"),
-            MaxPool2D(pool_size=2),
+        # self.architecture = [
+        #     # Block 1
+        #     Conv2D(filters=64, kernel_size=3, padding="same", activation="relu"),
+        #     Conv2D(filters=64, kernel_size=3, padding="same", activation="relu"),
+        #     MaxPool2D(pool_size=2),
 
-            #Block 2
-            Conv2D(filters=128, kernel_size=3, padding="same", activation="relu"),
-            Conv2D(filters=128, kernel_size=3, padding="same", activation="relu"),
-            MaxPool2D(pool_size=2),
+        #     #Block 2
+        #     Conv2D(filters=128, kernel_size=3, padding="same", activation="relu"),
+        #     Conv2D(filters=128, kernel_size=3, padding="same", activation="relu"),
+        #     MaxPool2D(pool_size=2),
 
-            #Block 3
-            Conv2D(filters=256, kernel_size=3, padding="same", activation="relu"),
-            MaxPool2D(pool_size=2),
+        #     #Block 3
+        #     Conv2D(filters=256, kernel_size=3, padding="same", activation="relu"),
+        #     MaxPool2D(pool_size=2),
 
-            # Block 4
-            Conv2D(filters=256, kernel_size=3, padding="same", activation="relu"),
-            MaxPool2D(pool_size=2),
+        #     # Block 4
+        #     Conv2D(filters=256, kernel_size=3, padding="same", activation="relu"),
+        #     MaxPool2D(pool_size=2),
 
+        #     Dropout(0.2),
+        #     Flatten(),
+        #     Dense(units=128, activation="relu"),
+        #     Dense(units=64, activation="relu"),
+        #     Dropout(0.1),
+        #     Dense(units=32, activation="relu"),
+        #     Dense(units=hp.num_classes, activation="softmax")
+        # ]
+
+    
+        self.architecture = [Conv2D(filters=64, kernel_size=(5,5), padding='same', activation='relu'),
+            Conv2D(filters=64, kernel_size=(5,5), padding='same', activation='relu'),
+            MaxPool2D(pool_size=(6,6), padding='same'),
+            Conv2D(filters=128, kernel_size=(5,5), padding='same', activation='relu'),
+            Conv2D(filters=128, kernel_size=(5,5), padding='same', activation='relu'),
+            MaxPool2D(pool_size=(2,2), padding='same'),
+            Conv2D(filters=256, kernel_size=(5,5), padding='same', activation='relu'),
+            Conv2D(filters=256, kernel_size=(5,5), padding='same', activation='relu'),
+            MaxPool2D(pool_size=(2,2), padding='same'),
             Dropout(0.2),
             Flatten(),
-            Dense(units=128, activation="relu"),
-            Dense(units=64, activation="relu"),
-            Dropout(0.1),
-            Dense(units=32, activation="relu"),
-            Dense(units=hp.num_classes, activation="softmax")
-        ]
+            Dense(256, activation='relu'),
+            Dense(hp.num_classes, activation='softmax')]
+
+        
 
     def call(self, x):
-        """ Passes input image through the network. """
+        """ Forward pass. """
 
         for layer in self.architecture:
             x = layer(x)
@@ -48,7 +66,7 @@ class Model(tf.keras.Model):
 
     @staticmethod
     def loss_fn(labels, predictions):
-        """ Loss function for the model. """
+        """ Loss function. """
 
         scce = tf.keras.losses.SparseCategoricalCrossentropy()
         return scce(labels, predictions)

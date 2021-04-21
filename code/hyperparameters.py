@@ -1,9 +1,9 @@
-num_epochs = 50
+num_epochs = 20
 
 learning_rate = 1e-3
 
-batch_size = 15
+batch_size = 7
 
-num_classes = 15
+num_classes = 2
 
-img_size = 32
+img_size = 64

@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow as tf
 from PIL import Image
 from sklearn.model_selection import train_test_split
+import hyperparameters as hp
 
 
 class Data():
@@ -10,20 +11,27 @@ class Data():
     def __init__(self):
         self.y = os.listdir("../data/yes") # array of names of images (strings)
         self.n = os.listdir("../data/no")
+
+        
         self.images = np.concatenate([self.y,self.n])
         self.labels = np.concatenate([np.full(len(self.y),1),np.full(len(self.n),0)])
-        self.data_sample = np.zeros((len(self.images),32,32,3))
+        self.data_sample = np.zeros((len(self.images),hp.img_size,hp.img_size,3))
+
+        self.X_train = []
+        self.X_test = []
+        self.y_train = []
+        self.y_test = []
 
    
     def normalize(self):
         for j,i in enumerate(self.images): # j is index, i is file path
             if j < len(self.y):
-                filepath = "../data/yes"
+                filepath = "../data/yes/"
             else:
-                filepath = "../data/no"
+                filepath = "../data/no/"
 
             img = Image.open(filepath + i)
-            img = img.resize((32, 32))
+            img = img.resize((hp.img_size, hp.img_size))
             img = np.array(img, dtype=np.float32)
             img /= 255. # normalizing pixels to 0-1
 
@@ -33,15 +41,20 @@ class Data():
 
             self.data_sample[j] = img
 
+
     def preproccess(self):
         #using vgg16 preprocessing
-        for i in range(len(self.data_sample)):
-            self.data_sample[i] = tf.keras.applications.vgg16.preprocess_input(self.data_sample[i])
+        for image in self.data_sample:
+            image = tf.keras.applications.vgg16.preprocess_input(image)
+
 
     def split_data(self):
 
         X_train, X_test, y_train, y_test = train_test_split(self.data_sample, 
-                                                self.labels, test_size=0.25, random_sample=42)
+                                                self.labels, test_size=0.25, random_state=39)
 
-        return X_train, X_test, y_train, y_test
+        self.X_train = X_train
+        self.X_test = X_test
+        self.y_train = y_train
+        self.y_test = y_test
 
