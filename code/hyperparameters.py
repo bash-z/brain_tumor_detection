@@ -1,6 +1,6 @@
 num_epochs = 50
 
-learning_rate = 1e-3
+learning_rate = 5e-3
 
 batch_size = 35
 
