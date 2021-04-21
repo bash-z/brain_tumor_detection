@@ -10,7 +10,7 @@ def train(model):
         x=data.X_train,
         y=data.y_train,
         epochs=hp.num_epochs,
-        batch_size=None,
+        batch_size=hp.batch_size,
         validation_split=0.15,
         verbose=1
     )
