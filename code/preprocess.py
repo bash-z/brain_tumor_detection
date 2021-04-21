@@ -2,64 +2,46 @@ import os
 import numpy as np
 import tensorflow as tf
 from PIL import Image
+from sklearn.model_selection import train_test_split
 
 
+class Data():
 
+    def __init__(self):
+        self.y = os.listdir("../data/yes") # array of names of images (strings)
+        self.n = os.listdir("../data/no")
+        self.images = np.concatenate([self.y,self.n])
+        self.labels = np.concatenate([np.full(len(self.y),1),np.full(len(self.n),0)])
+        self.data_sample = np.zeros((len(self.images),32,32,3))
 
-def load_data():
-    y = os.listdir("../data/yes")
-    n = os.listdir("../data/no")
+   
+    def normalize(self):
+        for j,i in enumerate(self.images): # j is index, i is file path
+            if j < len(self.y):
+                filepath = "../data/yes"
+            else:
+                filepath = "../data/no"
 
-    images = np.concatenate([y,n]) # only names of the images
+            img = Image.open(filepath + i)
+            img = img.resize((32, 32))
+            img = np.array(img, dtype=np.float32)
+            img /= 255. # normalizing pixels to 0-1
 
-    labels = np.concatenate([np.full(len(y),1),np.full(len(n),0)]) # setting labels to 1 and 0
+            # Grayscale -> RGB
+            if len(img.shape) == 2:
+                img = np.stack([img, img, img], axis=-1)
 
-    data_sample = np.zeros((len(images),32,32,3)) # each image is 32 x 32
+            self.data_sample[j] = img
 
+    def preproccess(self):
+        #using vgg16 preprocessing
+        for i in range(len(self.data_sample)):
+            self.data_sample[i] = tf.keras.applications.vgg16.preprocess_input(self.data_sample[i])
 
-def preprocess_yes():
-    for j,i in enumerate(y): # j is index, i is file path
-        img = Image.open("../data/yes/" + i)
-        img = img.resize((32, 32))
-        img = np.array(img, dtype=np.float32)
-        img /= 255. # normalizing pixels to 0-1
+    def split_data(self):
 
-        # Grayscale -> RGB
-        if len(img.shape) == 2:
-            img = np.stack([img, img, img], axis=-1)
-        #print(img.shape)
+        X_train, X_test, y_train, y_test = train_test_split(self.data_sample, 
+                                                self.labels, test_size=0.25, random_sample=42)
 
-        data_sample[j] = img
-
-def preprocess_no():
-
-    for j,i in enumerate(n):
-        img = Image.open("../data/no/" + i)
-        img = img.resize((32, 32))
-        img = np.array(img, dtype=np.float32)
-        #print(img.shape)
-        img /= 255.
-        #print(img.shape)
-
-        # Grayscale -> RGB
-        if len(img.shape) == 2:
-            #print('check')
-            img = np.stack([img, img, img], axis=-1)
-
-        #print(img.shape)
-        #print(i)
-        data_sample[j] = img
-
-
-def preproccess():
-    #using vgg16 preprocessing
-    for i in range(len(data_sample)):
-        data_sample[i] = tf.keras.applications.vgg16.preprocess_input(data_sample[i])
-        
-    print(data_sample.shape)
-    #print(np.asarray(data_sample).shape)
-
-
-
-
+        return X_train, X_test, y_train, y_test
 

@@ -1,5 +1,4 @@
 import tensorflow as tf
-
 from tensorflow.keras.layers import \
     Conv2D, MaxPool2D, Dropout, Flatten, Dense
 
@@ -37,7 +36,7 @@ class Model(tf.keras.Model):
             Dense(units=64, activation="relu"),
             Dropout(0.1),
             Dense(units=32, activation="relu"),
-            Dense(units=15, activation="softmax")
+            Dense(units=hp.num_classes, activation="softmax")
         ]
 
     def call(self, x):
