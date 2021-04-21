@@ -1,8 +1,8 @@
-num_epochs = 20
+num_epochs = 50
 
 learning_rate = 1e-3
 
-batch_size = 25
+batch_size = 35
 
 num_classes = 3
 
