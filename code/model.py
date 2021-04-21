@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import \
-    Conv2D, MaxPool2D, Dropout, Flatten, Dense
+    Conv2D, MaxPool2D, Dropout, Flatten, Dense, BatchNormalization
 
 import hyperparameters as hp
 
@@ -46,21 +46,25 @@ class Model(tf.keras.Model):
             Conv2D(filters=128, kernel_size=3, padding="same", activation="relu"),
             Conv2D(filters=128, kernel_size=3, padding="same", activation="relu"),
             MaxPool2D(pool_size=2),
+            BatchNormalization(),
 
             #Block 2
             Conv2D(filters=256, kernel_size=3, padding="same", activation="relu"),
             Conv2D(filters=256, kernel_size=3, padding="same", activation="relu"),
             MaxPool2D(pool_size=2),
+            BatchNormalization(),
 
             #Block 3
             Conv2D(filters=512, kernel_size=3, padding="same", activation="relu"),
             Conv2D(filters=512, kernel_size=3, padding="same", activation="relu"),
             MaxPool2D(pool_size=2),
+            BatchNormalization(),
 
             #Block 3
             Conv2D(filters=1028, kernel_size=3, padding="same", activation="relu"),
             Conv2D(filters=1028, kernel_size=3, padding="same", activation="relu"),
             MaxPool2D(pool_size=2),
+            BatchNormalization(),
 
             # Dropout(0.2),
             Flatten(),
