@@ -68,6 +68,7 @@ class Model(tf.keras.Model):
 
             Dropout(0.2),
             Flatten(),
+            Dense(units=256, activation="relu"),
             Dense(units=128, activation="relu"),
             Dense(units=64, activation="relu"),
             # Dropout(0.1),
