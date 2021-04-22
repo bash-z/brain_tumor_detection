@@ -66,7 +66,7 @@ class Model(tf.keras.Model):
             MaxPool2D(pool_size=2),
             BatchNormalization(),
 
-            # Dropout(0.2),
+            Dropout(0.2),
             Flatten(),
             Dense(units=128, activation="relu"),
             Dense(units=64, activation="relu"),
