@@ -11,14 +11,14 @@ import datetime
 
 def train(model, checkpoint_path, logs_path):
 
-    # callback_list = [
-    #     tf.keras.callbacks.TensorBoard(
-    #         log_dir='logs',
-    #         update_freq='epoch',
-    #         profile_batch=0)
-    #     # ImageLabelingLogger(logs_path, data),
-    #     # CustomModelSaver(checkpoint_path, 1, hp.max_num_weights)
-    # ]
+    callback_list = [
+        tf.keras.callbacks.TensorBoard(
+            log_dir='logs',
+            update_freq='epoch',
+            profile_batch=0)
+        # ImageLabelingLogger(logs_path, data),
+        # CustomModelSaver(checkpoint_path, 1, hp.max_num_weights)
+    ]
 
     
     model.fit(
@@ -28,8 +28,8 @@ def train(model, checkpoint_path, logs_path):
         batch_size=hp.batch_size,
         shuffle=True,
         validation_split=0.20,
-        verbose=1
-        # callbacks=callback_list
+        verbose=1,
+        callbacks=callback_list
     )
 
 def test(model):
