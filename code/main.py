@@ -3,8 +3,8 @@ import hyperparameters as hp
 from preprocess import Data
 import tensorflow as tf
 import os
-from tensorboard_utils import \
-        ImageLabelingLogger, CustomModelSaver
+# from tensorboard_utils import \
+#         ImageLabelingLogger, CustomModelSaver
 
 
 
@@ -14,9 +14,9 @@ def train(model, checkpoint_path, logs_path):
         tf.keras.callbacks.TensorBoard(
             log_dir='logs',
             update_freq='batch',
-            profile_batch=0),
-        ImageLabelingLogger(logs_path, data),
-        CustomModelSaver(checkpoint_path, 1, hp.max_num_weights)
+            profile_batch=0)
+        # ImageLabelingLogger(logs_path, data),
+        # CustomModelSaver(checkpoint_path, 1, hp.max_num_weights)
     ]
 
     
