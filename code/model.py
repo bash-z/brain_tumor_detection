@@ -14,7 +14,7 @@ class Model(tf.keras.Model):
         self.optimizer = tf.keras.optimizers.RMSprop(
             learning_rate=hp.learning_rate,
             momentum=hp.momentum)
-            
+
         self.architecture = [
             # Block 1
             Conv2D(filters=64, kernel_size=3, padding="same", activation="relu"),
@@ -76,8 +76,11 @@ class Model(tf.keras.Model):
             Dense(units=128, activation="relu"),
             Dense(units=64, activation="relu"),
             # Dropout(0.1),
-            Dense(units=32, activation="relu"),
-            Dense(units=hp.num_classes, activation="softmax")
+
+            #Dense(units=32, activation="relu"),
+            #Dense(units=hp.num_classes, activation="softmax")
+            Dense(units=32, activation="sigmoid"),
+            Dense(units=hp.num_classes, activation="sigmoid")
         ]
 
 
