@@ -41,7 +41,7 @@ def test(model):
 
 
 if __name__ == "__main__":
-    time_now = datetime.now()
+    time_now = datetime.datetime.now()
     timestamp = time_now.strftime("%m%d%y-%H%M%S")
 
     data = Data()
