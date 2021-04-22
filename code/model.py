@@ -61,7 +61,6 @@ class Model(tf.keras.Model):
             BatchNormalization(),
 
             Dropout(0.2),
-            Flatten(),
 
             #Block 4
             Conv2D(filters=1028, kernel_size=3, padding="same", activation="relu"),
