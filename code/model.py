@@ -10,10 +10,10 @@ class Model(tf.keras.Model):
     def __init__(self):
         super(Model, self).__init__()
 
-        #self.optimizer = tf.keras.optimizers.Adam(learning_rate=hp.learning_rate)
-        self.optimizer = tf.keras.optimizers.RMSprop(
-            learning_rate=hp.learning_rate,
-            momentum=hp.momentum)
+        self.optimizer = tf.keras.optimizers.Adam(learning_rate=hp.learning_rate)
+        # self.optimizer = tf.keras.optimizers.RMSprop(
+        #     learning_rate=hp.learning_rate,
+        #     momentum=hp.momentum)
 
         self.architecture = [
             # Block 1
@@ -80,7 +80,7 @@ class Model(tf.keras.Model):
             #Dense(units=32, activation="relu"),
             #Dense(units=hp.num_classes, activation="softmax")
             Dense(units=32, activation="relu"),
-            Dense(units=hp.num_classes, activation="softmax")
+            Dense(units=hp.num_classes, activation="sigmoid")
         ]
 
 
