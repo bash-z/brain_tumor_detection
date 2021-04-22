@@ -14,7 +14,7 @@ def train(model, checkpoint_path, logs_path):
     callback_list = [
         tf.keras.callbacks.TensorBoard(
             log_dir='logs',
-            update_freq='batch',
+            update_freq='epoch',
             profile_batch=0)
         # ImageLabelingLogger(logs_path, data),
         # CustomModelSaver(checkpoint_path, 1, hp.max_num_weights)
