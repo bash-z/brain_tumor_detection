@@ -27,7 +27,8 @@ def train(model, checkpoint_path, logs_path):
         epochs=hp.num_epochs,
         batch_size=hp.batch_size,
         shuffle=True,
-        validation_split=0.20,
+        validation_data= (data.X_val, data.y_val),
+        # validation_split=0.20,
         verbose=1,
         callbacks=callback_list
     )
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     model.compile(
         optimizer=model.optimizer,
         loss=model.loss_fn,
-        metrics=["accuracy"]
+        metrics=["sparse_categorical_accuracy"]
         )
     
     train(model, checkpoint_path, logs_path)
