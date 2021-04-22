@@ -10,8 +10,11 @@ class Model(tf.keras.Model):
     def __init__(self):
         super(Model, self).__init__()
 
-        self.optimizer = tf.keras.optimizers.Adam(learning_rate=hp.learning_rate)
-
+        #self.optimizer = tf.keras.optimizers.Adam(learning_rate=hp.learning_rate)
+        self.optimizer = tf.keras.optimizers.RMSprop(
+            learning_rate=hp.learning_rate,
+            momentum=hp.momentum)
+            
         self.architecture = [
             # Block 1
             Conv2D(filters=64, kernel_size=3, padding="same", activation="relu"),
