@@ -77,10 +77,10 @@ class Model(tf.keras.Model):
             Dense(units=64, activation="relu"),
             # Dropout(0.1),
 
-            #Dense(units=32, activation="relu"),
-            #Dense(units=hp.num_classes, activation="softmax")
             Dense(units=32, activation="relu"),
-            Dense(units=hp.num_classes, activation="sigmoid")
+            Dense(units=hp.num_classes, activation="softmax")
+            # Dense(units=32, activation="relu"),
+            # Dense(units=hp.num_classes, activation="sigmoid")
         ]
 
 
