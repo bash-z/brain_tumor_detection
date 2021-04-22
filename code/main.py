@@ -11,7 +11,8 @@ def train(model):
         y=data.y_train,
         epochs=hp.num_epochs,
         batch_size=hp.batch_size,
-        validation_split=0.15,
+        shuffle=True,
+        validation_split=0.20,
         verbose=1
     )
 
