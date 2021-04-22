@@ -8,20 +8,30 @@ from matplotlib import pyplot as plt
 # from tensorboard_utils import \
 #         ImageLabelingLogger, CustomModelSaver
 
+from tensorflow.keras.callbacks import ReduceLROnPlateau
+
 
 
 def train(model, checkpoint_path, logs_path):
 
-    callback_list = [
-        tf.keras.callbacks.TensorBoard(
+
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2,
+                              patience=2)
+    callback_list=[reduce_lr,
+            tf.keras.callbacks.TensorBoard(
             log_dir='logs',
             update_freq='epoch',
-            profile_batch=0)
-        # ImageLabelingLogger(logs_path, data),
-        # CustomModelSaver(checkpoint_path, 1, hp.max_num_weights)
-    ]
+            profile_batch=0)]
+    # callback_list = [
+    #     tf.keras.callbacks.TensorBoard(
+    #         log_dir='logs',
+    #         update_freq='epoch',
+    #         profile_batch=0)
+    #     # ImageLabelingLogger(logs_path, data),
+    #     # CustomModelSaver(checkpoint_path, 1, hp.max_num_weights)
+    # ]
 
-    
+
     history = model.fit(
         x=data.X_train,
         y=data.y_train,
@@ -42,6 +52,7 @@ def train(model, checkpoint_path, logs_path):
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'], loc='upper left')
     plt.show()
+    # plt.savefig('accuracy.png')
     # summarize history for loss
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
@@ -50,6 +61,7 @@ def train(model, checkpoint_path, logs_path):
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'], loc='upper left')
     plt.show()
+    # plt.savefig('loss.png')
 
 def test(model):
     model.evaluate(
@@ -82,10 +94,6 @@ if __name__ == "__main__":
         loss=model.loss_fn,
         metrics=["sparse_categorical_accuracy"]
         )
-    
+
     train(model, checkpoint_path, logs_path)
     # test(model)
-    
-
-    
-
