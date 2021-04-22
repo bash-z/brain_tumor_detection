@@ -34,14 +34,11 @@ class Data():
         self.data_sample = np.zeros((len(self.images),hp.img_size,hp.img_size,3))
 
         self.X_train = []
-        self.X_val = []
         self.X_test = []
         self.y_train = []
-        self.y_val = []
         self.y_test = []
 
         
-    
 
     def set_filepaths(self, image_names, parent_path):
         for i in range(len(image_names)):
@@ -77,14 +74,9 @@ class Data():
         X_train, X_test, y_train, y_test = train_test_split(self.data_sample, 
                                                 self.labels, test_size=0.25, random_state=42)
 
-        X_train, X_val, y_train, y_val = train_test_split(X_train, 
-                                                y_train, test_size=0.20, random_state=42)
-
         self.X_train = X_train
         self.X_test = X_test
         self.y_train = y_train
         self.y_test = y_test
 
-        self.X_val = X_val
-        self.y_val = y_val
 
