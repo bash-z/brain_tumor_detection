@@ -61,7 +61,7 @@ if __name__ == "__main__":
     model.compile(
         optimizer=model.optimizer,
         loss=model.loss_fn,
-        metrics=["sparse_categorical_accuracy"]
+        metrics=["accuracy"]
         )
     
     train(model, checkpoint_path, logs_path)
