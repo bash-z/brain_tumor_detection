@@ -33,6 +33,7 @@ def train(model, checkpoint_path, logs_path):
         callbacks=callback_list
     )
 
+    print(history.history.keys())
     # summarize history for accuracy
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
