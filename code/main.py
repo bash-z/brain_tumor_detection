@@ -52,7 +52,7 @@ def train(model, checkpoint_path, logs_path):
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'], loc='upper left')
     plt.show()
-    plt.savefig('accuracy.png')
+    # plt.savefig('accuracy.png')
     # summarize history for loss
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
@@ -61,7 +61,7 @@ def train(model, checkpoint_path, logs_path):
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'], loc='upper left')
     plt.show()
-    plt.savefig('loss.png')
+    # plt.savefig('loss.png')
 
 def test(model):
     model.evaluate(

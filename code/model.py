@@ -15,33 +15,33 @@ class Model(tf.keras.Model):
         #     learning_rate=hp.learning_rate,
         #     momentum=hp.momentum)
 
-        self.architecture = [
-            # Block 1
-            Conv2D(filters=64, kernel_size=3, padding="same", activation="relu"),
-            Conv2D(filters=64, kernel_size=3, padding="same", activation="relu"),
-            MaxPool2D(pool_size=2),
+        # self.architecture = [
+        #     # Block 1
+        #     Conv2D(filters=64, kernel_size=3, padding="same", activation="relu"),
+        #     Conv2D(filters=64, kernel_size=3, padding="same", activation="relu"),
+        #     MaxPool2D(pool_size=2),
 
-            #Block 2
-            Conv2D(filters=128, kernel_size=3, padding="same", activation="relu"),
-            Conv2D(filters=128, kernel_size=3, padding="same", activation="relu"),
-            MaxPool2D(pool_size=2),
+        #     #Block 2
+        #     Conv2D(filters=128, kernel_size=3, padding="same", activation="relu"),
+        #     Conv2D(filters=128, kernel_size=3, padding="same", activation="relu"),
+        #     MaxPool2D(pool_size=2),
 
-            #Block 3
-            Conv2D(filters=256, kernel_size=3, padding="same", activation="relu"),
-            MaxPool2D(pool_size=2),
+        #     #Block 3
+        #     Conv2D(filters=256, kernel_size=3, padding="same", activation="relu"),
+        #     MaxPool2D(pool_size=2),
 
-            # Block 4
-            Conv2D(filters=256, kernel_size=3, padding="same", activation="relu"),
-            MaxPool2D(pool_size=2),
+        #     # Block 4
+        #     Conv2D(filters=256, kernel_size=3, padding="same", activation="relu"),
+        #     MaxPool2D(pool_size=2),
 
-            Dropout(0.2),
-            Flatten(),
-            Dense(units=128, activation="relu"),
-            Dense(units=64, activation="relu"),
-            Dropout(0.1),
-            Dense(units=32, activation="relu"),
-            Dense(units=hp.num_classes, activation="softmax")
-        ]
+        #     Dropout(0.2),
+        #     Flatten(),
+        #     Dense(units=128, activation="relu"),
+        #     Dense(units=64, activation="relu"),
+        #     Dropout(0.1),
+        #     Dense(units=32, activation="relu"),
+        #     Dense(units=hp.num_classes, activation="softmax")
+        # ]
 
         ###MAIN
         self.architecture = [
