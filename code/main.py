@@ -3,6 +3,7 @@ import hyperparameters as hp
 from preprocess import Data
 import tensorflow as tf
 import os
+import datetime
 # from tensorboard_utils import \
 #         ImageLabelingLogger, CustomModelSaver
 
@@ -40,6 +41,7 @@ def test(model):
 
 
 if __name__ == "__main__":
+    time_now = datetime.now()
     timestamp = time_now.strftime("%m%d%y-%H%M%S")
 
     data = Data()
