@@ -4,6 +4,7 @@ from preprocess import Data
 import tensorflow as tf
 import os
 import datetime
+from matplotlib import pyplot as plt
 # from tensorboard_utils import \
 #         ImageLabelingLogger, CustomModelSaver
 
@@ -21,7 +22,7 @@ def train(model, checkpoint_path, logs_path):
     ]
 
     
-    model.fit(
+    history = model.fit(
         x=data.X_train,
         y=data.y_train,
         epochs=hp.num_epochs,
@@ -31,6 +32,23 @@ def train(model, checkpoint_path, logs_path):
         verbose=1,
         callbacks=callback_list
     )
+
+    # summarize history for accuracy
+    plt.plot(history.history['accuracy'])
+    plt.plot(history.history['val_accuracy'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'validation'], loc='upper left')
+    plt.show()
+    # summarize history for loss
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'validation'], loc='upper left')
+    plt.show()
 
 def test(model):
     model.evaluate(
