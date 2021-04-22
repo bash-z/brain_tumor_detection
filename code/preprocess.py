@@ -64,8 +64,8 @@ class Data():
 
     def preproccess(self):
         #using vgg16 preprocessing
-        for image in self.data_sample:
-            image = tf.keras.applications.vgg16.preprocess_input(image)
+        for i in range(len(self.data_samples)):
+            self.data_sample[i] = tf.keras.applications.vgg16.preprocess_input(self.data_sample[i])
 
 
     def split_data(self):
