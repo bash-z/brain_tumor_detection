@@ -8,20 +8,30 @@ from matplotlib import pyplot as plt
 # from tensorboard_utils import \
 #         ImageLabelingLogger, CustomModelSaver
 
+from tensorflow.keras.callbacks import ReduceLROnPlateau
+
 
 
 def train(model, checkpoint_path, logs_path):
 
-    callback_list = [
-        tf.keras.callbacks.TensorBoard(
+
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2,
+                              patience=2)
+    callback_list=[reduce_lr,
+            tf.keras.callbacks.TensorBoard(
             log_dir='logs',
             update_freq='epoch',
-            profile_batch=0)
-        # ImageLabelingLogger(logs_path, data),
-        # CustomModelSaver(checkpoint_path, 1, hp.max_num_weights)
-    ]
+            profile_batch=0)]
+    # callback_list = [
+    #     tf.keras.callbacks.TensorBoard(
+    #         log_dir='logs',
+    #         update_freq='epoch',
+    #         profile_batch=0)
+    #     # ImageLabelingLogger(logs_path, data),
+    #     # CustomModelSaver(checkpoint_path, 1, hp.max_num_weights)
+    # ]
 
-    
+
     history = model.fit(
         x=data.X_train,
         y=data.y_train,
@@ -82,10 +92,6 @@ if __name__ == "__main__":
         loss=model.loss_fn,
         metrics=["sparse_categorical_accuracy"]
         )
-    
+
     train(model, checkpoint_path, logs_path)
     # test(model)
-    
-
-    
-
