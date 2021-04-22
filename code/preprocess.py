@@ -64,7 +64,7 @@ class Data():
 
     def preproccess(self):
         #using vgg16 preprocessing
-        for i in range(len(self.data_samples)):
+        for i in range(len(self.data_sample)):
             self.data_sample[i] = tf.keras.applications.vgg16.preprocess_input(self.data_sample[i])
 
 
