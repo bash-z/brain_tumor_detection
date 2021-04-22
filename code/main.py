@@ -8,7 +8,6 @@ from tensorboard_utils import \
 
 
 
-
 def train(model, checkpoint_path, logs_path):
 
     callback_list = [
