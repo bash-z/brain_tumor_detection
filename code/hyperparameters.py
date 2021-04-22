@@ -1,4 +1,4 @@
-num_epochs = 50
+num_epochs = 200
 
 learning_rate = 1e-3
 

@@ -79,8 +79,8 @@ class Model(tf.keras.Model):
 
             #Dense(units=32, activation="relu"),
             #Dense(units=hp.num_classes, activation="softmax")
-            Dense(units=32, activation="sigmoid"),
-            Dense(units=hp.num_classes, activation="sigmoid")
+            Dense(units=32, activation="relu"),
+            Dense(units=hp.num_classes, activation="softmax")
         ]
 
 
