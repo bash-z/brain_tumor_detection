@@ -1,3 +1,5 @@
+![alt text](https://github.com/bash-z/brain_tumor_detection/blob/main/data/Train/MALIGNANT/0.jpg?raw=true)
+
 # Brain Tumor Detection
 
 # Overview
