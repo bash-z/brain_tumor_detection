@@ -13,5 +13,5 @@ Our model is comprised of four convolutional blocks, each with two Conv2D layers
 
 
 # Contributors
-@hamzah-shah - Hamzah Shah
-@bash-z - Bashar Zaidat
+[@hamzah-shah ](https://github.com/hamzah-shah)- Hamzah Shah  
+[@bash-z](https://github.com/bash-z) - Bashar Zaidat
