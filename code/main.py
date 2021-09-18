@@ -78,5 +78,7 @@ if __name__ == "__main__":
         metrics=["sparse_categorical_accuracy"]
         )
 
+    print("TRAINING")
     train(model)
-    # test(model)
+    print("TESTING")
+    test(model)
