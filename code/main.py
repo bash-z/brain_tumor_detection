@@ -37,11 +37,10 @@ def train(model, path_to_weights):
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2,
                               patience=2)
 
-    callback_list = [reduce_lr, tf.keras.callbacks.ModelCheckpoint(
+    callback_list = [reduce_lr, InterpretationCallback(), tf.keras.callbacks.ModelCheckpoint(
         filepath=path_to_weights,
         save_weights_only=True
     )]
-    # InterpretationCallback()
 
     history = model.fit(
         x=data.X_train,
