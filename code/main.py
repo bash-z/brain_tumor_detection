@@ -38,22 +38,22 @@ def train(model, path_to_weights):
 
     print(history.history.keys())
     # summarize history for accuracy
-    plt.plot(history.history['sparse_categorical_accuracy'])
-    plt.plot(history.history['val_sparse_categorical_accuracy'])
-    plt.title('model accuracy')
-    plt.ylabel('accuracy')
-    plt.xlabel('epoch')
-    plt.legend(['train', 'validation'], loc='upper left')
-    plt.show()
-    # plt.savefig('accuracy.png')
-    # summarize history for loss
-    plt.plot(history.history['loss'])
-    plt.plot(history.history['val_loss'])
-    plt.title('model loss')
-    plt.ylabel('loss')
-    plt.xlabel('epoch')
-    plt.legend(['train', 'validation'], loc='upper left')
-    plt.show()
+    # plt.plot(history.history['sparse_categorical_accuracy'])
+    # plt.plot(history.history['val_sparse_categorical_accuracy'])
+    # plt.title('model accuracy')
+    # plt.ylabel('accuracy')
+    # plt.xlabel('epoch')
+    # plt.legend(['train', 'validation'], loc='upper left')
+    # plt.show()
+    # # plt.savefig('accuracy.png')
+    # # summarize history for loss
+    # plt.plot(history.history['loss'])
+    # plt.plot(history.history['val_loss'])
+    # plt.title('model loss')
+    # plt.ylabel('loss')
+    # plt.xlabel('epoch')
+    # plt.legend(['train', 'validation'], loc='upper left')
+    # plt.show()
     # plt.savefig('loss.png')
 
 def test(model):
@@ -65,7 +65,9 @@ def test(model):
 
 def interpret(image, label, model):
     # tf.compat.v1.enable_eager_execution()
-    input = tf.Variable(Data._preprocess(Data._normalize(image)))
+    input = tf.Variable(Data._preprocess(Data._normalize(image, 1)))
+    plt.imshow(input.numpy())
+    plt.show()
     with tf.GradientTape() as tape:
         # tape.watch(input)
         prediction = model(tf.expand_dims(input, axis=0), training=False)
@@ -79,13 +81,16 @@ def interpret(image, label, model):
     print(type(loss))
     print("INPUT")
     print(input)
+    # plt.imshow(input.numpy())
+    # exit()
     # print(type(input))
     gradients = tape.gradient(loss, input)
     print(gradients)
 
+    plt.style.use('grayscale')
     fig, axes = plt.subplots(nrows=1, ncols=2)
-    x = axes[0].imshow(input.numpy(), cmap="gray")
-    y = axes[1].imshow(np.squeeze(gradients) * input.numpy(), cmap="gray")
+    x = axes[0].imshow(input.numpy())
+    y = axes[1].imshow(np.squeeze(gradients) * input.numpy())
     plt.savefig('interpretation.png')
 
 
@@ -95,7 +100,7 @@ def interpret(image, label, model):
 if __name__ == "__main__":
     data = Data()
     data.normalize()
-    data.preprocess()
+    # data.preprocess()
     data.split_data()
 
     model = Model()

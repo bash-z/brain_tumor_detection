@@ -4,6 +4,7 @@ import tensorflow as tf
 from PIL import Image
 from sklearn.model_selection import train_test_split
 import hyperparameters as hp
+from matplotlib import pyplot as plt
 
 
 class Data():
@@ -53,10 +54,10 @@ class Data():
    
     def normalize(self):
         for j,filepath in enumerate(self.images): # j is index, i is file path
-            self.data_sample[j] = self._normalize(filepath)
+            self.data_sample[j] = self._normalize(filepath, 0)
     
     @staticmethod
-    def _normalize(path):
+    def _normalize(path, test):
         img = Image.open(path)
         img = img.resize((hp.img_size, hp.img_size))
         img = np.array(img, dtype=np.float32)
@@ -65,7 +66,11 @@ class Data():
         # Grayscale -> RGB
         if len(img.shape) == 2:
             img = np.stack([img, img, img], axis=-1)
-        
+
+        # if test == 1:
+        #     plt.imshow(img)
+        #     plt.show()
+        # plt.savefig('test.png')
         return img
 
 
@@ -73,6 +78,8 @@ class Data():
         #using vgg16 preprocessing
         for i in range(len(self.data_sample)):
             self.data_sample[i] = self._preprocess(self.data_sample[i])
+            plt.imshow(self.data_sample[i])
+            plt.show()
 
     @staticmethod
     def _preprocess(img):
