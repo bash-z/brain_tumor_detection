@@ -37,7 +37,9 @@ def train(model, path_to_weights):
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2,
                               patience=2)
 
-    callback_list = [reduce_lr, InterpretationCallback(), tf.keras.callbacks.ModelCheckpoint(
+    # InterpretationCallback()
+
+    callback_list = [reduce_lr, tf.keras.callbacks.ModelCheckpoint(
         filepath=path_to_weights,
         save_weights_only=True
     )]
@@ -92,7 +94,6 @@ def interpret(image, label, model, filename):
     x = axes[0].imshow(input.numpy())
     y = axes[1].imshow(np.squeeze(gradients / np.max(gradients)) * input.numpy())
     plt.savefig(filename)
-    exit()
 
 
 if __name__ == "__main__":
@@ -113,5 +114,5 @@ if __name__ == "__main__":
 
     print("TRAINING")
     train(model=model, path_to_weights=os.path.join(os.path.dirname(os.getcwd()), 'model_weights'))
-    # print("TESTING")
-    # test(model)
+    print("TESTING")
+    test(model)
