@@ -37,12 +37,11 @@ def train(model, path_to_weights):
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2,
                               patience=2)
 
-    # InterpretationCallback()
-
     callback_list = [reduce_lr, tf.keras.callbacks.ModelCheckpoint(
         filepath=path_to_weights,
         save_weights_only=True
     )]
+    # InterpretationCallback()
 
     history = model.fit(
         x=data.X_train,
@@ -56,7 +55,7 @@ def train(model, path_to_weights):
     )
 
     print(history.history.keys())
-    if not os.path.isdir(os.path.join(os.getcwd(), 'figures')):
+    if not os.path.isdir(os.path.join(os.path.dirname(os.getcwd()), 'figures')):
         os.makedirs(os.path.join(os.path.dirname(os.getcwd()), 'figures'))
     plot(history, 'loss', 'val_loss', os.path.join('../figures', 'loss.png'))
     plot(history, 'sparse_categorical_accuracy', 'val_sparse_categorical_accuracy', os.path.join('../figures', 'accuracy.png'))
