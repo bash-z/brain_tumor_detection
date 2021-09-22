@@ -8,12 +8,36 @@ import numpy as np
 from tensorflow.keras.callbacks import ReduceLROnPlateau
 
 
+class InterpretationCallback(tf.keras.callbacks.Callback):
+    def on_epoch_end(self, epoch, logs=None):
+        interp_dir = os.path.join(os.path.dirname(os.getcwd()), 'interpretation')
+        if not os.path.isdir(interp_dir):
+            os.makedirs(interp_dir)
+        epoch_dir = "epoch" + str(epoch)
+        if not os.path.isdir(os.path.join(interp_dir, epoch_dir)):
+            os.makedirs(os.path.join(interp_dir, epoch_dir))
+
+        print("INTERPRETATION")
+        for root, _, files in os.walk('../data/Train'):
+            for f in files:
+                if os.path.splitext(f)[1] == ".jpg":
+                    path = os.path.join(root, f)
+                    type = os.path.basename(os.path.dirname(path))
+                    if type == "BENIGN":
+                        label = 2
+                    elif type == "MALIGNANT":
+                        label = 1
+                    else:
+                        label = 0
+                    interpret(image=path, label=label, model=model, filename=os.path.join("../interpretation", epoch_dir, type + "_" + f))
+
+
 
 def train(model, path_to_weights):
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2,
                               patience=2)
 
-    callback_list = [reduce_lr, tf.keras.callbacks.ModelCheckpoint(
+    callback_list = [reduce_lr, InterpretationCallback(), tf.keras.callbacks.ModelCheckpoint(
         filepath=path_to_weights,
         save_weights_only=True
     )]
@@ -56,9 +80,6 @@ def test(model):
 
 
 def interpret(image, label, model, filename):
-    if not os.path.isdir(os.path.join(os.path.dirname(os.getcwd()), 'interpretation')):
-        os.makedirs(os.path.join(os.path.dirname(os.getcwd()), 'interpretation'))
-
     input = tf.Variable(Data._normalize(image))
     with tf.GradientTape() as tape:
         prediction = model(tf.expand_dims(input, axis=0), training=False)
@@ -66,15 +87,12 @@ def interpret(image, label, model, filename):
         loss = scce(label, prediction)  
     gradients = tape.gradient(loss, input)
 
-    if (gradients > 0.1).sum() > 0:
-        print(f'Image Path: {image}')
-
-
     plt.style.use('grayscale')
     fig, axes = plt.subplots(nrows=1, ncols=2)
     x = axes[0].imshow(input.numpy())
-    y = axes[1].imshow(np.squeeze(gradients) * input.numpy())
-    plt.savefig(os.path.join('../interpretation', filename))
+    y = axes[1].imshow(np.squeeze(gradients / np.max(gradients)) * input.numpy())
+    plt.savefig(filename)
+    exit()
 
 
 if __name__ == "__main__":
@@ -97,16 +115,3 @@ if __name__ == "__main__":
     train(model=model, path_to_weights=os.path.join(os.path.dirname(os.getcwd()), 'model_weights'))
     # print("TESTING")
     # test(model)
-    print("INTERPRETATION")
-    for root, dirs, files in os.walk('../data/Train'):
-        for f in files:
-            if os.path.splitext(f)[1] == ".jpg":
-                path = os.path.join(root, f)
-                type = os.path.basename(os.path.dirname(path))
-                if type == "BENIGN":
-                    label = 2
-                elif type == "MALIGNANT":
-                    label = 1
-                else:
-                    label = 0
-                interpret(image=path, label=label, model=model, filename=type + "_" + f)
