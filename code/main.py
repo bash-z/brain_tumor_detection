@@ -30,7 +30,7 @@ def train(model, path_to_weights):
     )
 
     print(history.history.keys())
-    if not os.path.exists(os.path.join(os.getcwd(), 'figures')):
+    if not os.path.isdir(os.path.join(os.getcwd(), 'figures')):
         os.makedirs(os.path.join(os.path.dirname(os.getcwd()), 'figures'))
     plot(history, 'loss', 'val_loss', os.path.join('../figures', 'loss.png'))
     plot(history, 'sparse_categorical_accuracy', 'val_sparse_categorical_accuracy', os.path.join('../figures', 'accuracy.png'))
@@ -56,7 +56,7 @@ def test(model):
 
 
 def interpret(image, label, model, filename):
-    if not os.path.exists(os.path.join(os.path.dirname(os.getcwd()), 'interpretation')):
+    if not os.path.isdir(os.path.join(os.path.dirname(os.getcwd()), 'interpretation')):
         os.makedirs(os.path.join(os.path.dirname(os.getcwd()), 'interpretation'))
 
     input = tf.Variable(Data._normalize(image))
@@ -66,9 +66,9 @@ def interpret(image, label, model, filename):
         loss = scce(label, prediction)  
     gradients = tape.gradient(loss, input)
 
-    print(f'INPUT: {input}')
-    print(f'LOSS: {loss}')
-    print(f'GRADIENTS: {gradients}')
+    if (gradients > 0.1).sum() > 0:
+        print(f'Image Path: {image}')
+
 
     plt.style.use('grayscale')
     fig, axes = plt.subplots(nrows=1, ncols=2)
@@ -95,16 +95,18 @@ if __name__ == "__main__":
 
     print("TRAINING")
     train(model=model, path_to_weights=os.path.join(os.path.dirname(os.getcwd()), 'model_weights'))
-    print("TESTING")
-    test(model)
+    # print("TESTING")
+    # test(model)
     print("INTERPRETATION")
     for root, dirs, files in os.walk('../data/Train'):
         for f in files:
-            type = os.path.basename(os.path.dirname(os.path.join(root, f)))
-            if type == "BENIGN":
-                label = 2
-            elif type == "MALIGNANT":
-                label = 1
-            else:
-                label = 0
-            interpret(image=os.path.join(root, f), label=label, model=model, filename=type + "_" + f)
+            if os.path.splitext(f)[1] == ".jpg":
+                path = os.path.join(root, f)
+                type = os.path.basename(os.path.dirname(path))
+                if type == "BENIGN":
+                    label = 2
+                elif type == "MALIGNANT":
+                    label = 1
+                else:
+                    label = 0
+                interpret(image=path, label=label, model=model, filename=type + "_" + f)
