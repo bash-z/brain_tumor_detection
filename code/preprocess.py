@@ -27,6 +27,9 @@ class Data():
 
 
         self.images = np.concatenate([self.b1, self.b2, self.m1, self.m2, self.n1, self.n2])
+        # benign labeled as 2
+        # malignant labeled as 1
+        # normal labeled as 0
         self.labels = np.concatenate(
             [np.full(len(self.b1) + len(self.b2),2),
                                             np.full(len(self.m1) + len(self.m2),1), np.full(len(self.n1) + len(self.n2),0)])
@@ -50,23 +53,30 @@ class Data():
    
     def normalize(self):
         for j,filepath in enumerate(self.images): # j is index, i is file path
+            self.data_sample[j] = self._normalize(filepath)
+    
+    @staticmethod
+    def _normalize(path):
+        img = Image.open(path)
+        img = img.resize((hp.img_size, hp.img_size))
+        img = np.array(img, dtype=np.float32)
+        img /= 255. # normalizing pixels to 0-1
+
+        # Grayscale -> RGB
+        if len(img.shape) == 2:
+            img = np.stack([img, img, img], axis=-1)
         
-            img = Image.open(filepath)
-            img = img.resize((hp.img_size, hp.img_size))
-            img = np.array(img, dtype=np.float32)
-            img /= 255. # normalizing pixels to 0-1
-
-            # Grayscale -> RGB
-            if len(img.shape) == 2:
-                img = np.stack([img, img, img], axis=-1)
-
-            self.data_sample[j] = img
+        return img
 
 
-    def preproccess(self):
+    def preprocess(self):
         #using vgg16 preprocessing
         for i in range(len(self.data_sample)):
-            self.data_sample[i] = tf.keras.applications.vgg16.preprocess_input(self.data_sample[i])
+            self.data_sample[i] = self._preprocess(self.data_sample[i])
+
+    @staticmethod
+    def _preprocess(img):
+        return tf.keras.applications.vgg16.preprocess_input(img)
 
 
     def split_data(self):

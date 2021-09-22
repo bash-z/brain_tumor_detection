@@ -3,22 +3,26 @@ import hyperparameters as hp
 from preprocess import Data
 import tensorflow as tf
 from matplotlib import pyplot as plt
+import os
+import numpy as np
 
 
 from tensorflow.keras.callbacks import ReduceLROnPlateau
 
 
 
-def train(model):
-
-
+def train(model, path_to_weights):
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2,
                               patience=2)
-    callback_list=[reduce_lr,
-            tf.keras.callbacks.TensorBoard(
-            log_dir='logs',
-            update_freq='epoch',
-            profile_batch=0)]
+    # callback_list=[reduce_lr,
+    #         tf.keras.callbacks.TensorBoard(
+    #         log_dir='logs',
+    #         update_freq='epoch',
+    #         profile_batch=0)]
+    callback_list = [reduce_lr, tf.keras.callbacks.ModelCheckpoint(
+        filepath=path_to_weights,
+        save_weights_only=True
+    )]
 
 
     history = model.fit(
@@ -59,11 +63,39 @@ def test(model):
         verbose=1
     )
 
+def interpret(image, label, model):
+    # tf.compat.v1.enable_eager_execution()
+    input = tf.Variable(Data._preprocess(Data._normalize(image)))
+    with tf.GradientTape() as tape:
+        # tape.watch(input)
+        prediction = model(tf.expand_dims(input, axis=0), training=False)
+        scce = tf.keras.losses.SparseCategoricalCrossentropy()
+        loss = scce(label, prediction)
+        # loss = tf.losses.MSE(prediction, 1.0)
+        # tf.losses.MSA()
+
+    print("LOSS")
+    print(loss)
+    print(type(loss))
+    print("INPUT")
+    print(input)
+    # print(type(input))
+    gradients = tape.gradient(loss, input)
+    print(gradients)
+
+    fig, axes = plt.subplots(nrows=1, ncols=2)
+    x = axes[0].imshow(input.numpy(), cmap="jet", alpha=0.7)
+    y = axes[1].imshow(np.squeeze(gradients) * input.numpy(), cmap="jet", alpha=0.7)
+    plt.savefig('interpretation.png')
+
+
+
+
 
 if __name__ == "__main__":
     data = Data()
     data.normalize()
-    data.preproccess()
+    data.preprocess()
     data.split_data()
 
     model = Model()
@@ -79,6 +111,9 @@ if __name__ == "__main__":
         )
 
     print("TRAINING")
-    train(model)
+    train(model=model, path_to_weights=os.path.join(os.getcwd(), 'model_weights'))
     print("TESTING")
     test(model)
+    print("INTERPRETATION")
+    interpret(image="../data/Train/MALIGNANT/0.jpg", label=1, model=model)
+
