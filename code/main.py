@@ -84,8 +84,8 @@ def interpret(image, label, model):
     print(gradients)
 
     fig, axes = plt.subplots(nrows=1, ncols=2)
-    x = axes[0].imshow(input.numpy(), cmap="jet", alpha=0.7)
-    y = axes[1].imshow(np.squeeze(gradients) * input.numpy(), cmap="jet", alpha=0.7)
+    x = axes[0].imshow(input.numpy(), cmap="gray")
+    y = axes[1].imshow(np.squeeze(gradients) * input.numpy(), cmap="gray")
     plt.savefig('interpretation.png')
 
 
