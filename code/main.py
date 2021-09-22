@@ -92,7 +92,6 @@ def interpret(image, label, model, filename):
     x = axes[0].imshow(input.numpy())
     y = axes[1].imshow(np.squeeze(gradients / np.max(gradients)) * input.numpy())
     plt.savefig(filename)
-    exit()
 
 
 if __name__ == "__main__":
